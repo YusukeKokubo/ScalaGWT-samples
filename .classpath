@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-dev.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet-deps.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-user.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/validation-api-1.0.0.GA-sources.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/scala-library-gwt.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/slim3-1.0.15.jar"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>

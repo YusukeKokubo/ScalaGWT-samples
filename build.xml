@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="Hello" default="build" basedir=".">
+  <!-- Arguments -style PRETTY or -logLevel DEBUG to gwtc and devmode targets -->
+  <property name="gwt.args" value="-draftCompile -ea -style pretty -logLevel TRACE" />
+  <property name="gwt.dev.args" value="-logLevel TRACE" />
+  <property name="scala.args" value="-g:notailcalls -Xplugin:${basedir}/lib/scala/factorymanifests.jar -Xplugin:lib/scala/continuations.jar -P:continuations:enable -Yjribble-text"/>
+
+  <path id="scala.class.path">
+    <fileset dir="lib/scala">
+      <include name="scala-compiler.jar"/>
+      <include name="scala-library.jar"/>
+      <include name="protobuf-java-2.4.1.jar"/>
+    </fileset>
+  </path>
+
+  <path id="project.class.path">
+    <pathelement location="war/WEB-INF/classes"/>
+    <fileset dir="lib/gwt" includes="*.jar"/>
+    <pathelement location="lib/scala/scala-library-gwt.jar"/>
+    <!-- Add any additional non-server libs (such as JUnit) -->
+    <fileset dir="war/WEB-INF/lib" includes="**/*.jar"/>
+  </path>
+
+  <target name="libs" description="Copy libs to WEB-INF/lib">
+    <mkdir dir="war/WEB-INF/lib" />
+    <copy todir="war/WEB-INF/lib" file="lib/gwt/gwt-servlet.jar" />
+  </target>
+
+  <target name="gwtc" depends="scalac" description="GWT compile to JavaScript">
+    <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+      <classpath>
+        <pathelement location="src"/>
+        <pathelement location="war/WEB-INF/jribble"/>
+        <path refid="project.class.path"/>
+      </classpath>
+      <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+      <jvmarg value="-Xmx512M"/>
+      <jvmarg value="-Dx.gwt.astBuilder=true"/>
+      <arg line="${gwt.args}"/>
+      <arg value="com.google.gwt.sample.jribble.Hello"/>
+      <arg value="com.google.gwt.sample.mnemonics.Mnemonics"/>
+      <arg value="com.google.gwt.sample.showcase.Showcase"/>
+      <arg value="com.google.gwt.sample.gwtdlx.gwtdlx"/>
+    </java>
+  </target>
+  
+  <taskdef name="scalac" classname="scala.tools.ant.Scalac" classpathref="scala.class.path"/>
+
+  <target name="scalac" description="Scalac compile to jribble">
+    <mkdir dir="war/WEB-INF/jribble"/>
+    <!-- TODO(grek): We should have a proper javabootclasspath here -->
+    <scalac srcdir="src" destdir="war/WEB-INF/jribble" target="jribble" addparams="${scala.args}">
+      <include name="**/*.scala"/>
+      <include name="**/*.java"/>
+      <classpath refid="project.class.path"/>
+    </scalac>
+    <mkdir dir="war/WEB-INF/classes"/>
+    <javac srcdir="src" destdir="war/WEB-INF/classes">
+      <classpath refid="project.class.path"/>
+    </javac>
+  </target>
+
+  <target name="devmode" depends="scalac" description="Run development mode">
+    <java failonerror="true" fork="true" classname="com.google.gwt.dev.DevMode">
+      <classpath>
+        <pathelement location="src"/>
+        <pathelement location="war/WEB-INF/jribble"/>
+        <path refid="project.class.path"/>
+      </classpath>
+      <jvmarg value="-Xmx512M"/>
+      <jvmarg value="-Dx.gwt.astBuilder=true"/>
+      <arg value="-startupUrl"/>
+      <arg value="Hello.html"/>
+      <arg line="${gwt.dev.args}"/>
+      <arg value="com.google.gwt.sample.jribble.Hello"/>
+    </java>
+  </target>
+
+  <target name="build" depends="gwtc" description="Build this project" />
+
+  <target name="war" depends="build" description="Create a war file">
+    <zip destfile="Hello.war" basedir="war"/>
+  </target>
+
+  <target name="clean" description="Cleans this project">
+    <delete dir="war/WEB-INF/classes" failonerror="false" />
+    <delete dir="war/WEB-INF/jribble" failonerror="false" />
+    <delete dir="war/WEB-INF/gwtdlx" failonerror="false" />
+    <delete dir="war/hello" failonerror="false" />
+    <delete dir="war/showcase" failonerror="false" />
+    <delete dir="gwt-unitCache" failonerror="false" />
+    <delete dir="jribbleCache" failonerror="false" />
+    <delete dir="war/jribbleCache" failonerror="false" />
+    <delete file="Hello.war"/>
+  </target>
+
+</project>
