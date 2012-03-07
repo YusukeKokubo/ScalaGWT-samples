@@ -24,3 +24,4 @@ war/WEB-INF/lib/jdo2-api-2.3-eb.jar
 war/WEB-INF/lib/jsr107cache-1.1.jar
 lib/gwt/
 lib/scala/
+src/com/appspot/b4sg/server/meta/
