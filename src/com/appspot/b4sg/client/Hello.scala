@@ -19,9 +19,6 @@ class Hello extends EntryPoint {
   val countLabel = new Label
 
   def onModuleLoad() {
-    val numbers = List(1, 2, 3, 4)
-    val strings = numbers map (_.toString + "...")
-    val s = strings mkString ", "
     val textBox = new TextBox
     val b = new Button("send", (_: ClickEvent) => service.hoge(textBox.getValue(), MyAsyncCallback()));
     RootPanel.get("button").add(b);
